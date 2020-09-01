@@ -36,14 +36,13 @@ type Secret struct {
 
 // GoogleSecretEntrySpec defines the desired state of GoogleSecretEntry
 type GoogleSecretEntrySpec struct {
-	SecretRef SecretRef `json:"secretRef"`
-	Secrets   []Secret  `json:"secrets"`
+	SecretRef *SecretRef `json:"secretRef,omitempty"`
+	Secrets   []Secret   `json:"secrets"`
 }
 
 // GoogleSecretEntryStatus defines the observed state of GoogleSecretEntry
 type GoogleSecretEntryStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	ServiceAccountEmail string `json:"serviceAccountEmail"`
 }
 
 // +kubebuilder:object:root=true
