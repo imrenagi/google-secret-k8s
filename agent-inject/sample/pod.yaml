@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: static-web
+  labels:
+    role: myrole
+  annotations:
+    google.secret.security.imrenagi.com/agent-inject: "true"
+    google.secret.security.imrenagi.com/agent-google-secret-crd: "googlesecretentry-sample"
+spec:
+  containers:
+    - name: web
+      image: nginx
+      ports:
+        - name: web
+          containerPort: 80
+          protocol: TCP
