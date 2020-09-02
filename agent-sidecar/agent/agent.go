@@ -2,36 +2,40 @@ package agent
 
 import (
 	"context"
-	"fmt"
 
+	secretmanager "cloud.google.com/go/secretmanager/apiv1"
 	ioutil "github.com/imrenagi/google-secret-k8s/agent-sidecar/io"
 	secretop "github.com/imrenagi/google-secret-k8s/secret-operator/api"
 	"github.com/rs/zerolog/log"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/kubernetes"
-
-	secretmanager "cloud.google.com/go/secretmanager/apiv1"
 	"google.golang.org/api/option"
 	secretmanagerpb "google.golang.org/genproto/googleapis/cloud/secretmanager/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/kubernetes"
 )
 
 type Agent struct {
 	Clientset               *kubernetes.Clientset
 	SecretSecurityClientset *secretop.Clientset
-	SecretVolumePath        string
+
+	// SecretVolumePath for storing secret retrieved from google secret manager
+	SecretVolumePath string
+
+	// GoogleSecretEntryName name of CRD used for storing secret definition
+	GoogleSecretEntryName string
+
+	// GoogleSecretEntryNamespace namespace where CRD is located
+	GoogleSecretEntryNamespace string
 }
 
-func (a *Agent) SyncSecret() error {
-
-	ctx := context.Background()
+// SyncSecret ...
+func (a *Agent) SyncSecret(ctx context.Context) error {
 
 	entry, err := a.SecretSecurityClientset.SecretSecurityV1alpha1().
-		GoogleSecretEntry("").Get(ctx, "googlesecretentry-sample")
+		GoogleSecretEntry(a.GoogleSecretEntryNamespace).
+		Get(ctx, a.GoogleSecretEntryName)
 	if err != nil {
 		return err
 	}
-
-	fmt.Println(entry.Name)
 
 	secret, err := a.Clientset.CoreV1().Secrets(entry.Spec.SecretRef.Namespace).
 		Get(ctx, entry.Spec.SecretRef.Name, metav1.GetOptions{})
@@ -39,9 +43,8 @@ func (a *Agent) SyncSecret() error {
 		return err
 	}
 
-	b := secret.Data[entry.Spec.SecretRef.DataKey]
-
-	googleSecretMngrClient, err := secretmanager.NewClient(ctx, option.WithCredentialsJSON(b))
+	jsoncreds := secret.Data[entry.Spec.SecretRef.DataKey]
+	googleSecretMngrClient, err := secretmanager.NewClient(ctx, option.WithCredentialsJSON(jsoncreds))
 	if err != nil {
 		return err
 	}
@@ -59,7 +62,7 @@ func (a *Agent) SyncSecret() error {
 			return err
 		}
 
-		log.Info().Msg(fmt.Sprintf("get secret for %s: %s", secret.Path, res.Payload.Data))
+		log.Info().Msgf("successfully get secret for %s", secret.Path)
 	}
 
 	return nil

@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"os"
 	"path/filepath"
 
@@ -16,9 +17,9 @@ import (
 func NewInitCmd() *cobra.Command {
 
 	var (
-		googleSecretEntryName string
-		serviceAccountPath    string
-		secretVolumePath      string
+		googleSecretEntryName      string
+		googleSecretEntryNamespace string
+		secretVolumePath           string
 	)
 
 	initCmd := cobra.Command{
@@ -49,12 +50,16 @@ func NewInitCmd() *cobra.Command {
 			}
 
 			agent := agent.Agent{
-				Clientset:               clientset,
-				SecretSecurityClientset: secretClientset,
-				SecretVolumePath:        secretVolumePath,
+				Clientset:                  clientset,
+				SecretSecurityClientset:    secretClientset,
+				SecretVolumePath:           secretVolumePath,
+				GoogleSecretEntryName:      googleSecretEntryName,
+				GoogleSecretEntryNamespace: googleSecretEntryNamespace,
 			}
 
-			err = agent.SyncSecret()
+			ctx := context.Background()
+
+			err = agent.SyncSecret(ctx)
 			if err != nil {
 				panic(err.Error())
 			}
@@ -63,7 +68,7 @@ func NewInitCmd() *cobra.Command {
 	}
 
 	initCmd.Flags().StringVar(&googleSecretEntryName, "secret-entry", "", "google secret entry name")
-	initCmd.Flags().StringVar(&serviceAccountPath, "service-account-key", "", "gcp service account path")
+	initCmd.Flags().StringVar(&googleSecretEntryNamespace, "namespace", "", "google secret entry namespace")
 	initCmd.Flags().StringVar(&secretVolumePath, "secret-volume-path", "/google/secrets", "path for storing secret after being fetched from google secret manager")
 
 	return &initCmd
