@@ -152,7 +152,6 @@ func (a *Agent) inject() (bool, error) {
 	if !ok {
 		return true, nil
 	}
-
 	return strconv.ParseBool(raw)
 }
 
@@ -161,7 +160,6 @@ func (a *Agent) initFirst() (bool, error) {
 	if !ok {
 		return false, nil
 	}
-
 	return strconv.ParseBool(raw)
 }
 
@@ -170,15 +168,14 @@ func (a *Agent) prePopulate() (bool, error) {
 	if !ok {
 		return true, nil
 	}
-
 	return strconv.ParseBool(raw)
 }
 
 func (a *Agent) prePopulateOnly() (bool, error) {
 	raw, ok := a.Annotations[AnnotationAgentPrePopulateOnly]
 	if !ok {
-		return false, nil
+		// TODO this is set to true until we are ready with sidecar container
+		return true, nil
 	}
-
 	return strconv.ParseBool(raw)
 }
