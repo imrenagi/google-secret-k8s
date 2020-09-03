@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/imrenagi/google-secret-k8s/agent-sidecar/agent"
-	secretop "github.com/imrenagi/google-secret-k8s/secret-operator/api"
+	secretop "github.com/imrenagi/google-secret-k8s/secret-operator/pkg/api"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"k8s.io/client-go/kubernetes"

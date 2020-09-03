@@ -5,7 +5,7 @@ import (
 
 	secretmanager "cloud.google.com/go/secretmanager/apiv1"
 	ioutil "github.com/imrenagi/google-secret-k8s/agent-sidecar/io"
-	secretop "github.com/imrenagi/google-secret-k8s/secret-operator/api"
+	secretop "github.com/imrenagi/google-secret-k8s/secret-operator/pkg/api"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/api/option"
 	secretmanagerpb "google.golang.org/genproto/googleapis/cloud/secretmanager/v1"
