@@ -1,0 +1,40 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: gsecret-agent-injector
+  labels:
+    app.kubernetes.io/name: gsecret-agent-injector
+    app.kubernetes.io/instance: gsecret-k8s
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: gsecret-agent-injector-clusterrole
+  labels:
+    app.kubernetes.io/name: gsecret-agent-injector
+    app.kubernetes.io/instance: gsecret-k8s
+rules:
+- apiGroups: ["admissionregistration.k8s.io"]
+  resources: ["mutatingwebhookconfigurations"]
+  verbs: 
+    - "get"
+    - "list"
+    - "watch"
+    - "patch"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: gsecret-agent-injector-binding
+  labels:
+    app.kubernetes.io/name: gsecret-agent-injector
+    app.kubernetes.io/instance: gsecret-k8s
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: gsecret-agent-injector-clusterrole
+subjects:
+- kind: ServiceAccount
+  name: gsecret-agent-injector
+  namespace: secret-operator-system

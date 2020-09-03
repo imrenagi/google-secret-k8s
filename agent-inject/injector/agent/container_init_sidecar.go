@@ -1,6 +1,8 @@
 package agent
 
 import (
+	"fmt"
+
 	corev1 "k8s.io/api/core/v1"
 )
 
@@ -18,8 +20,6 @@ func (a *Agent) ContainerInitSidecar() (corev1.Container, error) {
 		},
 	}
 	volumeMounts = append(volumeMounts, a.ContainerVolumeMounts()...)
-
-	arg := DefaultContainerArg
 
 	if a.ConfigMapName != "" {
 		volumeMounts = append(volumeMounts, corev1.VolumeMount{
@@ -39,14 +39,17 @@ func (a *Agent) ContainerInitSidecar() (corev1.Container, error) {
 		return corev1.Container{}, err
 	}
 
+	args := fmt.Sprintf("./gsecret-agent init --secret-entry %s --namespace %s --secret-volume-path %s",
+		a.GoogleSecretEntryName, a.Namespace, secretVolumePath)
+
 	newContainer := corev1.Container{
-		Name:         "vault-agent-init",
+		Name:         "gsecret-agent-init",
 		Image:        a.ImageName,
 		Env:          envs,
 		Resources:    resources,
 		VolumeMounts: volumeMounts,
 		Command:      []string{"/bin/sh", "-ec"},
-		Args:         []string{arg},
+		Args:         []string{args},
 	}
 
 	return newContainer, nil

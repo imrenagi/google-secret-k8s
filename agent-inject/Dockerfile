@@ -8,8 +8,7 @@ FROM alpine:3.10
 WORKDIR /
 RUN apk update && apk add --no-cache ca-certificates tzdata && update-ca-certificates
 RUN adduser -D -g '' appuser
-COPY --from=builder /google-secret-k8s/bin/google-secret-k8s .
-COPY --from=builder /google-secret-k8s/cert /cert
+COPY --from=builder /google-secret-k8s/bin/gsecret-agent-injector .
 USER appuser
 
 CMD ["./gsecret-agent-injector", "server"]

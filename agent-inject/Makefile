@@ -53,5 +53,5 @@ build.image:
 .PHONY: release.image
 release.image: 
 	docker push $(IMAGE_NAME):latest
-	docker push $(IMAGE_NAME):$(IMAGE_TAG)
+	# docker push $(IMAGE_NAME):$(IMAGE_TAG)
 	

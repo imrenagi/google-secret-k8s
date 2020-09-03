@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	DefaultVaultImage = "imrenagi/gsecret-agent:latest"
+	DefaultAgentImage = "imrenagi/gsecret-agent:latest"
 )
 
 const (
@@ -103,7 +103,7 @@ func Init(pod *corev1.Pod, cfg AgentConfig) error {
 
 	if _, ok := pod.ObjectMeta.Annotations[AnnotationAgentImage]; !ok {
 		if cfg.Image == "" {
-			cfg.Image = DefaultVaultImage
+			cfg.Image = DefaultAgentImage
 		}
 		pod.ObjectMeta.Annotations[AnnotationAgentImage] = cfg.Image
 	}

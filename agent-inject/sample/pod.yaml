@@ -4,10 +4,12 @@ metadata:
   name: static-web
   labels:
     role: myrole
+  namespace: default
   annotations:
     google.secret.security.imrenagi.com/agent-inject: "true"
     google.secret.security.imrenagi.com/agent-google-secret-crd: "googlesecretentry-sample"
 spec:
+  serviceAccountName: static-web
   containers:
     - name: web
       image: nginx
@@ -15,3 +17,53 @@ spec:
         - name: web
           containerPort: 80
           protocol: TCP
+--- 
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: static-web
+  namespace: default
+  labels:
+    app.kubernetes.io/name: static-web
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: static-web-role
+  labels:
+    app.kubernetes.io/name: static-web
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: 
+    - "get"
+- apiGroups:
+  - secret.security.imrenagi.com
+  resources:
+  - googlesecretentries
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - secret.security.imrenagi.com
+  resources:
+  - googlesecretentries/status
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: static-web-binding
+  namespace: default
+  labels:
+    app.kubernetes.io/name: static-web
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: static-web-role
+subjects:
+- kind: ServiceAccount
+  name: static-web
+  namespace: default

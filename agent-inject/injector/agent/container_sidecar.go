@@ -18,46 +18,47 @@ const (
 // ContainerSidecar creates a new container to be added
 // to the pod being mutated.
 func (a *Agent) ContainerSidecar() (corev1.Container, error) {
-	volumeMounts := []corev1.VolumeMount{
-		{
-			Name:      a.ServiceAccountName,
-			MountPath: a.ServiceAccountPath,
-			ReadOnly:  true,
-		},
-	}
-	volumeMounts = append(volumeMounts, a.ContainerVolumeMounts()...)
+	// 	volumeMounts := []corev1.VolumeMount{
+	// 		{
+	// 			Name:      a.ServiceAccountName,
+	// 			MountPath: a.ServiceAccountPath,
+	// 			ReadOnly:  true,
+	// 		},
+	// 	}
+	// 	volumeMounts = append(volumeMounts, a.ContainerVolumeMounts()...)
 
-	arg := DefaultContainerArg
+	// 	s
 
-	if a.ConfigMapName != "" {
-		volumeMounts = append(volumeMounts, corev1.VolumeMount{
-			Name:      configVolumeName,
-			MountPath: configVolumePath,
-			ReadOnly:  true,
-		})
-	}
+	// 	if a.ConfigMapName != "" {
+	// 		volumeMounts = append(volumeMounts, corev1.VolumeMount{
+	// 			Name:      configVolumeName,
+	// 			MountPath: configVolumePath,
+	// 			ReadOnly:  true,
+	// 		})
+	// 	}
 
-	envs, err := a.ContainerEnvVars(false)
-	if err != nil {
-		return corev1.Container{}, err
-	}
+	// 	envs, err := a.ContainerEnvVars(false)
+	// 	if err != nil {
+	// 		return corev1.Container{}, err
+	// 	}
 
-	resources, err := a.parseResources()
-	if err != nil {
-		return corev1.Container{}, err
-	}
+	// 	resources, err := a.parseResources()
+	// 	if err != nil {
+	// 		return corev1.Container{}, err
+	// 	}
 
-	newContainer := corev1.Container{
-		Name:         "vault-agent",
-		Image:        a.ImageName,
-		Env:          envs,
-		Resources:    resources,
-		VolumeMounts: volumeMounts,
-		Command:      []string{"/bin/sh", "-ec"},
-		Args:         []string{arg},
-	}
+	// 	newContainer := corev1.Container{
+	// 		Name:         "vault-agent",
+	// 		Image:        a.ImageName,
+	// 		Env:          envs,
+	// 		Resources:    resources,
+	// 		VolumeMounts: volumeMounts,
+	// 		Command:      []string{"/bin/sh", "-ec"},
+	// 		Args:         []string{arg},
+	// 	}
 
-	return newContainer, nil
+	// 	return newContainer, nil
+	return corev1.Container{}, nil
 }
 
 // Valid resource notations: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-cpu
