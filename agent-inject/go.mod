@@ -9,6 +9,7 @@ require (
 	github.com/hashicorp/vault/sdk v0.1.14-0.20191205220236-47cffd09f972
 	github.com/mattbaird/jsonpatch v0.0.0-20200820163806-098863c1fc24
 	github.com/pkg/errors v0.9.1
+	github.com/radovskyb/watcher v1.0.7
 	github.com/rs/zerolog v1.19.0
 	github.com/spf13/cobra v1.0.0
 	github.com/stretchr/testify v1.4.0
