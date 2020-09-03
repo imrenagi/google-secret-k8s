@@ -31,6 +31,8 @@ func NewInitCmd() *cobra.Command {
 			var config *rest.Config
 			var err error
 
+			log.Debug().Msg("Start init")
+
 			if os.Getenv("ENV") == "development" {
 				kubeconfig := filepath.Join(homeDir(), ".kube", "config")
 				config, err = clientcmd.BuildConfigFromFlags("", kubeconfig)
@@ -44,11 +46,15 @@ func NewInitCmd() *cobra.Command {
 				}
 			}
 
+			log.Debug().Msg("create kubernetes clientset")
+
 			// creates the clientset
 			clientset, err := kubernetes.NewForConfig(config)
 			if err != nil {
 				log.Fatal().Err(err).Msg("unable to create kubernetes clientset")
 			}
+
+			log.Debug().Msg("create secret operator clientset")
 
 			secretClientset, err := secretop.NewClientSetForConfig(config)
 			if err != nil {
@@ -62,6 +68,8 @@ func NewInitCmd() *cobra.Command {
 				GoogleSecretEntryName:      googleSecretEntryName,
 				GoogleSecretEntryNamespace: googleSecretEntryNamespace,
 			}
+
+			log.Debug().Msg("create kubernetes clientset")
 
 			ctx := context.Background()
 			err = agent.SyncSecret(ctx)

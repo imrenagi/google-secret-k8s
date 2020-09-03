@@ -30,6 +30,8 @@ type Agent struct {
 // SyncSecret ...
 func (a *Agent) SyncSecret(ctx context.Context) error {
 
+	log.Debug().Msg("Start secret sync")
+
 	entry, err := a.SecretSecurityClientset.SecretSecurityV1alpha1().
 		GoogleSecretEntry(a.GoogleSecretEntryNamespace).
 		Get(ctx, a.GoogleSecretEntryName)
@@ -37,11 +39,15 @@ func (a *Agent) SyncSecret(ctx context.Context) error {
 		return err
 	}
 
+	log.Debug().Msg("retrieving secret")
+
 	secret, err := a.Clientset.CoreV1().Secrets(entry.Spec.SecretRef.Namespace).
 		Get(ctx, entry.Spec.SecretRef.Name, metav1.GetOptions{})
 	if err != nil {
 		return err
 	}
+
+	log.Debug().Msg("creating gcp client api")
 
 	jsoncreds := secret.Data[entry.Spec.SecretRef.DataKey]
 	googleSecretMngrClient, err := secretmanager.NewClient(ctx, option.WithCredentialsJSON(jsoncreds))
