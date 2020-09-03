@@ -1,0 +1,23 @@
+# Default values for gsecret-k8s.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+nameOverride: ""
+fullnameOverride: ""
+
+operator:
+  createCRD: true
+  
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations and labels to add to the service account
+    labels: {}
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name:
+  
+  image:
+    repository: imrenagi/google-secret-operator:v0.0.10
+    pullPolicy: IfNotPresent
