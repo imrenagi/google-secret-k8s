@@ -3,6 +3,8 @@ package v1alpha1
 import (
 	"context"
 
+	"github.com/imrenagi/google-secret-k8s/secret-operator/api/v1alpha1"
+
 	"k8s.io/client-go/rest"
 )
 
@@ -12,7 +14,7 @@ type GoogleSecretEntryGetter interface {
 
 // GoogleSecretEntryInterface has methods to work with GoogleSecretEntry resources.
 type GoogleSecretEntryInterface interface {
-	Get(ctx context.Context, name string) (*GoogleSecretEntry, error)
+	Get(ctx context.Context, name string) (*v1alpha1.GoogleSecretEntry, error)
 }
 
 // GoogleSecretEntry ...
@@ -32,8 +34,8 @@ type googleSecretEntryClient struct {
 	namespace string
 }
 
-func (g *googleSecretEntryClient) Get(ctx context.Context, name string) (*GoogleSecretEntry, error) {
-	var entry GoogleSecretEntry
+func (g *googleSecretEntryClient) Get(ctx context.Context, name string) (*v1alpha1.GoogleSecretEntry, error) {
+	var entry v1alpha1.GoogleSecretEntry
 	err := g.client.Get().
 		Namespace(g.namespace).
 		Resource("googlesecretentries").

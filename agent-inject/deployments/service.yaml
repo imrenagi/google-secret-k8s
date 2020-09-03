@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: agent-injector
+  namespace: secret-operator-system
+  labels:
+    app: agent-injector
+spec:
+  ports:
+  - port: 443
+    targetPort: 8080
+  selector:
+    app: agent-injector

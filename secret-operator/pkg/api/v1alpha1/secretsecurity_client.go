@@ -1,6 +1,7 @@
 package v1alpha1
 
 import (
+	"github.com/imrenagi/google-secret-k8s/secret-operator/api/v1alpha1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
 	"k8s.io/client-go/rest"
@@ -28,12 +29,12 @@ func (s *SecretSecurityV1alpha1Client) RESTClient() rest.Interface {
 // NewForConfig ...
 func NewForConfig(cfg *rest.Config) (*SecretSecurityV1alpha1Client, error) {
 	scheme := runtime.NewScheme()
-	if err := SchemeBuilder.AddToScheme(scheme); err != nil {
+	if err := v1alpha1.SchemeBuilder.AddToScheme(scheme); err != nil {
 		return nil, err
 	}
 
 	config := *cfg
-	config.GroupVersion = &GroupVersion
+	config.GroupVersion = &v1alpha1.GroupVersion
 	config.APIPath = "/apis"
 	config.ContentType = runtime.ContentTypeJSON
 	config.NegotiatedSerializer = serializer.NewCodecFactory(scheme)
