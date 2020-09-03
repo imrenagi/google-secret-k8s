@@ -1,7 +1,7 @@
-package v1alpha1
+package api
 
 import (
-	"github.com/imrenagi/google-secret-k8s/secret-operator/api/v1alpha1"
+	"github.com/imrenagi/google-secret-k8s/secret-operator/pkg/api/v1alpha1"
 	"k8s.io/client-go/rest"
 )
 
