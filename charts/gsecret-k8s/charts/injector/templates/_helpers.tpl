@@ -56,7 +56,7 @@ Create the name of the service account to use
 */}}
 {{- define "injector.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (include "injector.fullname" .) .Values.serviceAccount.name }}
+    {{ default (include "injector.name" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}

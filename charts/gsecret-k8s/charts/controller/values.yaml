@@ -1,4 +1,4 @@
-nameOverride: ""
+nameOverride: "gsecret-controller"
 fullnameOverride: ""
 
 createCRD: true
