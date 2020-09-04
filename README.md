@@ -45,7 +45,7 @@ Run:
 $ kubectl apply -f mysecret.yaml
 ```
 
-1. Create a `GoogleSecretEntry` Custom Resoruce to store the reference to the secret created on previous steps and list of secret path you want to fetch for the application. 
+* Create a `GoogleSecretEntry` Custom Resoruce to store the reference to the secret created on previous steps and list of secret path you want to fetch for the application. 
 
     The example below shows that you will fetch a secret stored in Google Secret Manager with path `projects/imre-demo/secrets/db_creds/versions/latest` and then store the data to a file name `db-creds` in directory named `/google/secrets` on the application container.
 
