@@ -15,7 +15,7 @@ spec:
       labels:
         control-plane: controller-manager
     spec:
-      serviceAccountName: {{ include "operator.serviceAccountName" . }}
+      serviceAccountName: {{ include "controller.serviceAccountName" . }}
       containers:
       - args:
         - --secure-listen-address=0.0.0.0:8443
@@ -32,7 +32,7 @@ spec:
         - --enable-leader-election
         command:
         - /manager
-        image: {{ .Values.operator.image.repository }}
+        image: {{ .Values.image.repository }}
         name: manager
         resources:
           limits:
