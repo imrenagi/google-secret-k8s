@@ -1,0 +1,37 @@
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "injector.name" . }}-clusterrole
+  labels:
+    app.kubernetes.io/name: {{ include "injector.name" . }}
+    helm.sh/chart: {{ include "injector.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+rules:
+- apiGroups: ["admissionregistration.k8s.io"]
+  resources: ["mutatingwebhookconfigurations"]
+  verbs: 
+    - "get"
+    - "list"
+    - "watch"
+    - "patch"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "injector.name" . }}-rolebinding
+  labels:
+    app.kubernetes.io/name: {{ include "injector.name" . }}
+    helm.sh/chart: {{ include "injector.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "injector.name" . }}-clusterrole
+subjects:
+- kind: ServiceAccount
+  name: {{ include "injector.name" . }}
+  namespace: secret-operator-system

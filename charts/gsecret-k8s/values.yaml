@@ -1,0 +1,12 @@
+# Default values for gsecret-k8s.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+nameOverride: ""
+fullnameOverride: ""
+
+controller:
+  enabled: true
+
+injector:
+  enabled: true

@@ -1,0 +1,18 @@
+nameOverride: "gsecret-controller"
+fullnameOverride: ""
+
+createCRD: true
+
+image:
+  repository: imrenagi/google-secret-operator:v0.0.10
+  pullPolicy: IfNotPresent
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations and labels to add to the service account
+  labels: {}
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
