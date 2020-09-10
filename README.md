@@ -11,7 +11,11 @@ This project creates a kubernetes controller and an operator named `GoogleSecret
 1. Kubernetes `Secret` name and the key used to store base64 encoded string of GCP service account key.
 1. Path to the secret in [Google Secret Manager](https://cloud.google.com/secret-manager) and the name of the file where the secret will be written in the `Pod`'s mounted memory.
 
-Besides that controller, this project creates another RESTful service which uses [Kubernetes Admission Controller](https://kubernetes.io/blog/2019/03/21/a-guide-to-kubernetes-admission-controllers/) feature to intercept the creation of an Pod and mutate the pod definition to add an init container. This init container later is used to fetch the credentials from Google Secret Manager and store it to `/google/secrets` directory by default. This removes the user needs to put logics to fetch the secret from the code. 
+Besides that controller, this project creates another RESTful service which uses [Kubernetes Admission Controller](https://kubernetes.io/blog/2019/03/21/a-guide-to-kubernetes-admission-controllers/) feature to intercept the creation of an Pod and mutate the pod definition to add an init container. 
+
+![admission-controller](https://d33wubrfki0l68.cloudfront.net/af21ecd38ec67b3d81c1b762221b4ac777fcf02d/7c60e/images/blog/2019-03-21-a-guide-to-kubernetes-admission-controllers/admission-controller-phases.png)
+
+This init container later is used to fetch the credentials from Google Secret Manager and store it to `/google/secrets` directory by default. This removes the user needs to put logics to fetch the secret from the code. 
 
 ![application-flow](./docs/img/application-flow.png)
 
